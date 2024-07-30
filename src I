@@ -1,0 +1,78 @@
+importar  pandas  como  pd 
+de  sklearn.model_selection  importar  train_test_split 
+de  sklearn.linear_model  importar  LogisticRegression 
+de  sklearn.metrics  importar  accuracy_score ,  classification_report 
+importar  avisos
+
+# Substituindo avisos de conversão para melhor legibilidade 
+warnings . filterwarnings ( "ignore" ,  category = FutureWarning ) 
+warnings . filterwarnings ( "ignore" ,  category = DeprecationWarning ) 
+warnings . filterwarnings ( "ignore" ,  category = UserWarning )
+
+# Importar bibliotecas para visualização 
+import  matplotlib.pyplot  as  plt 
+import  seaborn  as  sns
+
+# Função para plotar um gráfico de dispersão 
+def  plot_scatter ( X ,  y ,  title ): 
+    plt . figure ( figsize = ( 8 ,  6 )) 
+    sns . scatterplot ( x = X . iloc [:,  0 ],  y = X . iloc [:,  1 ],  hue = y ) 
+    plt . title ( title ) 
+    plt . xlabel ( 'Recurso 1' ) 
+    plt . ylabel ( 'Recurso 2' ) 
+    plt . legend ( title = 'infected' ,  loc = 'best' ) 
+    plt . show ()
+
+# Carregamento dos dados 
+data_files  =  [ 'AIDS_Classification.csv' ,  'AIDS_Classification_5000.csv' , 
+              'AIDS_Classification_15000.csv' ,  'AIDS_Classification_50000.csv' ]
+
+# Loop para analisar cada conjunto de dados 
+para  arquivo  em  data_files : 
+    print ( f " \n Conjunto de dados: { file } " ) 
+    try : 
+        # Leitura do conjunto de dados 
+        df  =  pd . read_csv ( arquivo )
+
+        # Verificação da coluna 'infected' 
+        if  'infected'  not  in  df . columns : 
+            raise  KeyError ( "Erro: A coluna 'infected' não está presente no conjunto de dados." )
+
+        # Separação de atributos e rótulo 
+        X  =  df . drop ( colunas = [ 'infectado' ]) 
+        y  =  df [ 'infectado' ]
+
+        # Visualização dos dados com um gráfico de dispersão 
+        plot_scatter ( X ,  y ,  f 'Gráfico de Dispersão - { file } ' )
+
+        # Divisão em conjunto de treinamento e teste 
+        X_train ,  X_test ,  y_train ,  y_test  =  train_test_split ( X ,  y ,  test_size = 0.2 ,  random_state = 42 )
+
+        # Treinamento do modelo de regressão logística 
+        model  =  LogisticRegression ( max_iter = 1000 )   # Aumentando o número máximo de iterações do 
+        modelo . ajuste ( X_train ,  y_train )
+
+        # Previsões 
+        y_pred  =  model . predict ( X_test )
+
+        # Avaliação do modelo 
+        precisão  =  precisão_score ( y_test ,  y_pred ) 
+        print ( f "Acurácia do modelo: { precisão : .2f } " )
+
+        # Relatório de classificação 
+        print ( "Relatório de Classificação:" ) 
+        print ( classification_report ( y_test ,  y_pred ))
+
+    exceto  KeyError  como  e : 
+        print ( e ) 
+        continue
+
+# Análise como médico especialista 
+print ( " \n Análise como Médico Especialista:" ) 
+print ( "A previsão de infecção pelo vírus da AIDS é crucial para identificar pacientes em risco." ) 
+print ( "A acurácia do modelo indica a proporção de análise corretas, mas é importante considerar outras estatísticas," ) 
+print ( "como sensibilidade e especificidade, para entender melhor o desempenho do modelo." ) 
+print ( "O relatório de classificação fornece informações sobre a precisão, recall e pontuação F1 para cada classe ," ) 
+print ( "o que é fundamental para avaliar o desempenho do modelo em identificar pacientes infectados e não infectados." ) 
+print ( "No entanto, é necessário avaliar o modelo em conjunto com outras medidas diagnósticas e clínicas para" ) 
+print ( "determinar sua eficácia na prática clínica. "
