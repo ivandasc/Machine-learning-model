@@ -1,1 +1,67 @@
+importar  pandas  como  pd 
+importar  matplotlib.pyplot  como  plt
 
+# URLs dos arquivos 
+urls  =  [ 
+    "https://drive.google.com/file/d/1ZkkHCvqgDzlnWXEm_7cZwZ68DvPc56SY/view?usp=sharing" , 
+    "https://drive.google.com/file/d/1ZlxdTXTbzs8R67BJVuH6JMyv2R3SluZO/view? usp=sharing" , 
+    "https://drive.google.com/file/d/1Zh_nRiNoIPl0tJD6ViRPaeuDdFqPygIh/view?usp=sharing" , 
+    "https://drive.google.com/file/d/1ZrLOSjH9qEegy_8qD8bLNVloHin1uTKq/view?usp= compartilhamento" 
+]
+
+# Função para obter o ID do arquivo a partir da URL 
+def  get_id_from_url ( url ): 
+    return  url . dividir ( "/" )[ - 2 ]
+
+# Carregar os dados 
+dfs  =  [] 
+for  url  in  urls : 
+    file_id  =  get_id_from_url ( url ) 
+    path  =  f "https://drive.google.com/uc?id= { file_id } " 
+    dfs . append ( pd . read_csv ( path ))
+
+# Concatenar os DataFrames 
+df  =  pd . concat ( dfs ,  ignore_index = True )
+
+#Visualizações gráficas 
+#Histograma da idade 
+plt . figura ( figsize = ( 10 ,  6 )) 
+plt . hist ( df [ 'idade' ],  bins = 20 ,  color = 'skyblue' ,  edgecolor = 'black' ) 
+plt . title ( 'Distribuição da Idade' ) 
+plt . xlabel ( 'Idade' ) 
+plt . ylabel ( 'Frequência' ) 
+plt . grade ( Verdadeiro ) 
+plt . mostrar ()
+
+# Gráfico de dispersão idade versus peso 
+plt . figura ( figsize = ( 10 ,  6 )) 
+plt . dispersão ( df [ 'idade' ],  df [ 'peso' ],  cor = 'laranja' ,  alfa = 0,5 ) 
+plt . título ( 'Idade versus Peso' ) 
+plt . xlabel ( 'Idade' ) 
+plt . ylabel ( 'Peso (kg)' ) 
+plt . grade ( Verdadeiro ) 
+plt . mostrar ()
+
+# Gráfico de barras para a contagem de infectados 
+plt . figura ( figsize = ( 8 ,  6 )) 
+df [ 'infectado' ] . valor_contagens () . plot ( kind = 'bar' ,  color = [ 'skyblue' ,  'salmon' ]) 
+plt . title ( 'Contagem de Infectados (0: Não, 1: Sim)' ) 
+plt . xlabel ( 'Infectado' ) 
+plt . ylabel ( 'Contagem' ) 
+plt . xticks ( rotação = 0 ) 
+plt . grade ( eixo = 'y' ) 
+plt . mostrar ()
+
+# Relatório completo 
+print ( "Relatório completo:" ) 
+print ( "-------------------" ) 
+print ( "Informações gerais sobre o conjunto de dados:" ) 
+print ( df . info ()) 
+print ( " \n Estatísticas descritivas:" ) 
+print ( df . description ())
+
+# Dados externos relevantes 
+print ( " \n Dados externos relevantes:" ) 
+print ( "- A AIDS (Síndrome da Imunodeficiência Adquirida) é uma doença causada pelo vírus HIV." ) 
+print ( "- A idade e o peso podem ser fatores importantes na progressão e tratamento da AIDS." ) 
+print ( "- O status de infecção (0: não infectado, 1: infectado) é uma chave neste contexto." )
